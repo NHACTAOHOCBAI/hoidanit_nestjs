@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
     ExceptionFilter,
     Catch,
     ArgumentsHost,
     HttpException,
     HttpStatus,
+    BadRequestException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
@@ -20,18 +23,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
                 ? exception.getStatus()
                 : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        const message =
+        let message =
             exception instanceof HttpException
                 ? exception.getResponse()
                 : 'Internal server error';
-
+        if (exception instanceof BadRequestException) {
+            message = (exception.getResponse() as any).message[0]
+        }
         const errorResponse: ErrorResponseDto = {
             statusCode: status,
-            message: message,
+            message,
             timestamp: new Date().toISOString(),
             path: request.url,
         };
-
         response.status(status).json(errorResponse);
     }
 }

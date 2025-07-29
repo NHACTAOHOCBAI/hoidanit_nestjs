@@ -26,6 +26,7 @@ export default tseslint.config(
   },
   {
     rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'prettier/prettier': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',

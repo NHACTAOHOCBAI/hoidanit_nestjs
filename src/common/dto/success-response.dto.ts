@@ -8,10 +8,10 @@ export class SuccessResponseDto<T = any> {
 }
 
 export function buildSuccessResponse<T>(
-    data: T,
-    message: string,
     statusCode = 200,
-    request?: Request,
+    message: string,
+    data: T,
+    request?: Request
 ): SuccessResponseDto<T> {
     return {
         statusCode,

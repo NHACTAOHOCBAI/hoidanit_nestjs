@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from 'src/common/filters/htttp-Exception.filter';
+import { LoggingInterceptor } from 'src/common/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,8 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
     whitelist: true
   }));
+  //interceptor
+  app.useGlobalInterceptors(new LoggingInterceptor());
   //catch global exception
   app.useGlobalFilters(new AllExceptionsFilter());
   await app.listen(port);
