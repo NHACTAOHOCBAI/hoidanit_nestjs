@@ -1,6 +1,6 @@
 import { Exclude, plainToInstance } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
-import { User } from "src/users/entities/user.entity";
+import { IsEmail, IsIn, IsNotEmpty, IsString } from "class-validator";
+import { User } from "src/modules/users/entities/user.entity";
 
 export class UserResponseDto {
     @IsNotEmpty()
@@ -10,8 +10,8 @@ export class UserResponseDto {
     name: string;
     @IsEmail()
     email: string;
-    @Exclude()
-    password: string;
+    @IsIn(["ADMIN", "USER"])
+    role: "ADMIN" | "USER"
 }
 export const convertToUserResponse = (plain: User): UserResponseDto => {
     return plainToInstance(UserResponseDto, plain);

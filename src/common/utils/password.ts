@@ -7,7 +7,15 @@ const hashPassword = async (password: string) => {
         return hash
     }
     catch {
-        throw new HttpException("Hash password failedfailed", HttpStatus.BAD_REQUEST)
+        throw new HttpException("Hash password failed", HttpStatus.BAD_REQUEST)
     }
 }
-export { hashPassword }
+const comparePassword = async (password: string, hashPassword: string) => {
+    try {
+        return await bcrypt.compare(password, hashPassword)
+    }
+    catch {
+        throw new HttpException("Compare password failed", HttpStatus.BAD_REQUEST)
+    }
+}
+export { hashPassword, comparePassword }

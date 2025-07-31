@@ -3,11 +3,12 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
+import { convertToUserResponse, convertToUsersResponse, UserResponseDto } from 'src/modules/users/dto/response-user.dto';
 import { hashPassword } from 'src/common/utils/password';
-import { convertToUserResponse, convertToUsersResponse, UserResponseDto } from 'src/users/dto/response-user.dto';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
-import { GetUserDto } from 'src/users/dto/get-users.dto';
+import { UpdateUserDto } from 'src/modules/users/dto/update-user.dto';
+import { GetUserDto } from 'src/modules/users/dto/get-users.dto';
+
 
 @Injectable()
 export class UsersService {
@@ -33,7 +34,7 @@ export class UsersService {
   }
 
   async findAll(getUserDto: GetUserDto) {
-    const { keyword, sortBy = "createdAt", page, size, order = "DESC", email } = getUserDto
+    const { keyword, sortBy = "createdAt", page, size, order = "DESC" } = getUserDto
     const [users, total] = await this.usersRepository.findAndCount({
       where: [
         ...(keyword ? [{ name: ILike(`%${keyword}%`) }, { email: ILike(`%${keyword}%`) }] : [])

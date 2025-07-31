@@ -1,9 +1,13 @@
-import { Controller, Get, Post, Body, Param, Delete, HttpStatus, Put, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, HttpStatus, Put, Query, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { buildSuccessResponse } from 'src/common/dto/success-response.dto';
-import { GetUserDto } from 'src/users/dto/get-users.dto';
+import { GetUserDto } from 'src/modules/users/dto/get-users.dto';
+import { Roles } from 'src/common/decorators/roles.decorators';
+import { JwtAuthGuard } from 'src/common/guards/JwtAuth.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+
 
 @Controller('users')
 export class UsersController {
@@ -15,6 +19,8 @@ export class UsersController {
     return buildSuccessResponse(HttpStatus.CREATED, "Create user success", createdUser)
   }
 
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   async findAll(@Query() getUserDto: GetUserDto) {
     const Users = await this.usersService.findAll(getUserDto);

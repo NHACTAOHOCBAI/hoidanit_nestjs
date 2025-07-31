@@ -20,4 +20,7 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column()
+    role: "ADMIN" | "USER"
 }
