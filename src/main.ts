@@ -13,7 +13,8 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1', { exclude: [''] });
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true,
-    whitelist: true
+    whitelist: true,
+    transform: true,
   }));
   //interceptor
   app.useGlobalInterceptors(new LoggingInterceptor());
